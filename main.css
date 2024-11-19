@@ -76,6 +76,27 @@ body {
     flex-direction: column;
     gap: 20px;
 }
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.redirect-button {
+    background-color: #1c87c9;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.redirect-button:hover {
+    background-color: #145d8a;
+}
+
 
 /* Media Queries */
 @media (max-width: 767px) {
