@@ -1,0 +1,42 @@
+.resume-container { background-color: #fff; max-width: 612px; overflow: hidden; padding: 33px 36px; }
+.content-wrapper { gap: 20px; display: flex; }
+.main-content { display: flex; flex-direction: column; line-height: normal; width: 67%; }
+.profile-section { display: flex; flex-grow: 1; color: #1c1c1c; font: 275 10px Montserrat, sans-serif; }
+.experience-content { align-self: start; display: flex; flex-direction: column; flex-grow: 1; flex-basis: 0; width: fit-content; }
+.role-tag { border: 1px solid #1c1c1c; align-self: start; font-weight: 200; text-align: center; letter-spacing: 1.4px; padding: 10px 34px; }
+.name-heading { font-size: 32px; font-weight: 800; margin-top: 17px; }
+.section-divider { background: #1c1c1c; display: flex; margin-top: 32px; height: 1px; }
+.experience-title { font-size: 14px; letter-spacing: 2.1px; align-self: start; margin-top: 9px; }
+.job-entry { letter-spacing: 1.4px; margin: 34px 28px 0 0; }
+.vertical-divider { background: #1c1c1c; display: flex; width: 1px; height: 726px; }
+.sidebar { display: flex; flex-direction: column; line-height: normal; width: 33%; margin-left: 20px; }
+.sidebar-content { display: flex; flex-direction: column; align-items: start; color: #1c1c1c; letter-spacing: 1.4px; font: 275 10px Montserrat, sans-serif; }
+.section-header { border: 1px solid #1c1c1c; text-align: center; padding: 10px 37px; }
+.contact-info { align-self: stretch; margin-top: 17px; }
+.education-header { border: 1px solid #1c1c1c; margin-top: 69px; text-align: center; padding: 10px 30px; }
+.education-details { margin-top: 17px; }
+.certification-header { border: 1px solid #1c1c1c; margin-top: 76px; text-align: center; padding: 10px 15px; }
+.certification-details { margin-top: 17px; }
+.skills-header { border: 1px solid #1c1c1c; margin-top: 76px; text-align: center; padding: 10px 46px; }
+.skills-list { margin-top: 17px; }
+.company-name, .job-title { font-weight: 700; color: #1c1c1c; }
+.job-highlights { color: #1c1c1c; }
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+@media (max-width: 991px) {
+    .resume-container { padding: 0 20px; }
+    .content-wrapper { flex-direction: column; align-items: stretch; gap: 0; }
+    .main-content { width: 100%; }
+    .profile-section { margin-top: 40px; }
+    .role-tag { padding: 0 20px; }
+    .job-entry { margin-right: 10px; }
+    .sidebar { width: 100%; }
+    .sidebar-content { margin-top: 40px; }
+    .section-header, .education-header, .skills-header { padding: 0 20px; }
+    .certification-header { margin-top: 40px; }
+}

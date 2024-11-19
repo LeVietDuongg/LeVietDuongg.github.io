@@ -1,40 +1,71 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Introduction</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-        .container {
-            text-align: center;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #333;
-        }
-        p {
-            color: #666;
-        }
-    </style>
+    <title>Resume</title>
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Xin chào!</h1>
-        <p>Tôi là Le Viet Duong, một lập trình viên đam mê công nghệ và sáng tạo.</p>
-    </div>
+    <section class="resume-container">
+        <div class="content-wrapper">
+            <article class="main-content">
+                <div class="profile-section">
+                    <div class="experience-content">
+                        <h1 class="role-tag">Developer</h1>
+                        <h2 class="name-heading">Lê Viết Dương</h2>
+                        <hr class="section-divider">
+                        <h3 class="experience-title">WORK EXPERIENCE</h3>
+
+                        <article class="job-entry">
+                            <h4 class="company-name">University Infomataion Technology</h4>
+                            <p class="job-title">Student | 2022 - Present</p>
+                            <p>Sinh viên năm 3.</p>
+                            <ul class="job-highlights">
+                                <li>Xây dựng dự án mô hình tìm kiếm và dự đoán ổ gà trên đường</li>
+                                <li>Thiết lập game cỡ nhỏ cho 4-10 người chơi</li>
+                                <li>Sửa chữa sever</li>
+                            </ul>
+                        </article>
+                    </div>
+                    <div class="vertical-divider"></div>
+                </div>
+            </article>
+
+            <aside class="sidebar">
+                <div class="sidebar-content">
+                    <h3 class="section-header">CONTACT</h3>
+                    <address class="contact-info">
+                        +84 (0) 385377030<br>
+                        le4465520@.com<br>
+                        Bình Dương 72000<br>
+                        Thuận An, Bình Dương
+                    </address>
+
+                    <h3 class="education-header">EDUCATION</h3>
+                    <div class="education-details">
+                        University Infomataion Technology<br>
+                       
+                        2022-2026
+                    </div>
+
+                    <h3 class="certification-header">CERTIFICATIONS</h3>
+                    <div class="certification-details">
+                      
+                        University Infomataion Technology<br>
+                        2026
+                    </div>
+
+                    <h3 class="skills-header">SKILLS</h3>
+                    <ul class="skills-list">
+                        <li>Web Development</li>
+                        <li>UI Design</li>
+                        <li>Data Structures and Algorithms</li>
+                        <li>Database Management</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </section>
 </body>
 </html>
