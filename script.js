@@ -1,4 +1,63 @@
+// Đường dẫn API
 const API_URL = 'https://web-production-8e6a.up.railway.app';
+
+// Xử lý nút đăng nhập
+const loginBtn = document.getElementById('login-btn');
+const logoutBtn = document.getElementById('logout-btn');
+async function fetchCart() {
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch(`${API_URL}/api/cart`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        if (response.ok) {
+            const cartData = await response.json();
+            console.log('Dữ liệu giỏ hàng:', cartData);
+        } else {
+            console.error('Không thể tải giỏ hàng:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Lỗi khi tải giỏ hàng:', error);
+    }
+}
+
+// Hàm đăng nhập
+loginBtn.addEventListener('click', () => {
+    window.location.href = 'auth.html';
+});
+
+// Hàm đăng xuất
+function logout() {
+    localStorage.removeItem('token'); // Xóa token
+    alert('Đã đăng xuất!');
+    updateAuthButtons(false); // Cập nhật nút
+}
+
+// Cập nhật hiển thị nút đăng nhập/đăng xuất
+function updateAuthButtons(isLoggedIn) {
+    if (isLoggedIn) {
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'block';
+    } else {
+        loginBtn.style.display = 'block';
+        logoutBtn.style.display = 'none';
+    }
+}
+
+// Kiểm tra trạng thái đăng nhập khi tải trang
+document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    updateAuthButtons(!!token); // Cập nhật nút dựa vào trạng thái token
+});
+
+// Gắn sự kiện click cho nút
+loginBtn.addEventListener('click', login);
+logoutBtn.addEventListener('click', logout);
+
 
 // Fetch products from API
 async function fetchProducts() {
