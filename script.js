@@ -1,4 +1,4 @@
-const API_URL = 'myshop-production-f804.up.railway.app';
+const API_URL = 'https://web-production-8e6a.up.railway.app';
 
 // Fetch products from API
 async function fetchProducts() {
