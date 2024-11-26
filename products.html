@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Basic - Trang chủ</title>
+    <title>Shop Basic - Sản phẩm</title>
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
@@ -21,18 +21,19 @@
     </header>
 
     <main class="main-content">
-        <div class="hero">
-            <div class="container">
-                <h2>Welcome to Shop Basic</h2>
-                <p>Khám phá bộ sưu tập mới nhất của chúng tôi</p>
-            </div>
-        </div>
-        
         <div class="container">
-            <section class="featured-products">
-                <h3>Sản phẩm nổi bật</h3>
-                <div id="featured-products" class="product-grid"></div>
-            </section>
+            <div class="products-header">
+                <h2>Sản phẩm</h2>
+                <div class="filters">
+                    <select id="category-filter">
+                        <option value="">Tất cả</option>
+                        <option value="ao">Áo</option>
+                        <option value="quan">Quần</option>
+                        <option value="giay">Giày</option>
+                    </select>
+                </div>
+            </div>
+            <div id="product-list" class="product-grid"></div>
         </div>
     </main>
 
@@ -66,6 +67,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="products.js"></script>
 </body>
 </html>

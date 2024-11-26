@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Basic - Trang chủ</title>
+    <title>Shop Basic - Chi tiết sản phẩm</title>
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
@@ -21,18 +21,26 @@
     </header>
 
     <main class="main-content">
-        <div class="hero">
-            <div class="container">
-                <h2>Welcome to Shop Basic</h2>
-                <p>Khám phá bộ sưu tập mới nhất của chúng tôi</p>
-            </div>
-        </div>
-        
         <div class="container">
-            <section class="featured-products">
-                <h3>Sản phẩm nổi bật</h3>
-                <div id="featured-products" class="product-grid"></div>
-            </section>
+            <div id="product-detail" class="product-detail">
+                <div class="product-images">
+                    <img id="main-image" src="" alt="">
+                    <div id="thumbnail-list" class="thumbnail-list"></div>
+                </div>
+                <div class="product-info">
+                    <h1 id="product-name"></h1>
+                    <p id="product-price" class="price"></p>
+                    <p id="product-description" class="description"></p>
+                    <div class="product-actions">
+                        <div class="quantity-selector">
+                            <button id="decrease-quantity">-</button>
+                            <input type="number" id="quantity" value="1" min="1">
+                            <button id="increase-quantity">+</button>
+                        </div>
+                        <button id="add-to-cart" class="add-to-cart-btn">Thêm vào giỏ hàng</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -66,6 +74,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="product-detail.js"></script>
 </body>
 </html>
