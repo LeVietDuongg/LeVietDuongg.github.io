@@ -49,62 +49,6 @@
         </div>
     </footer>
 
-    <script>
-        const API_URL = 'https://web-production-8e6a.up.railway.app';
-
-        // Xử lý đăng nhập
-        document.getElementById('login-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-password').value;
-
-            try {
-                const response = await fetch(`${API_URL}/api/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password }),
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    alert('Đăng nhập thành công!');
-                    localStorage.setItem('token', data.token); // Lưu JWT
-                    window.location.href = 'index.html'; // Chuyển về trang chủ
-                } else {
-                    const errorData = await response.json();
-                    alert(errorData.error || 'Đăng nhập thất bại!');
-                }
-            } catch (error) {
-                console.error('Lỗi khi đăng nhập:', error);
-                alert('Đã xảy ra lỗi khi đăng nhập.');
-            }
-        });
-
-        // Xử lý đăng ký
-        document.getElementById('register-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const username = document.getElementById('register-username').value;
-            const password = document.getElementById('register-password').value;
-
-            try {
-                const response = await fetch(`${API_URL}/api/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password }),
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    alert(data.message || 'Đăng ký thành công!');
-                } else {
-                    const errorData = await response.json();
-                    alert(errorData.error || 'Đăng ký thất bại!');
-                }
-            } catch (error) {
-                console.error('Lỗi khi đăng ký:', error);
-                alert('Đã xảy ra lỗi khi đăng ký.');
-            }
-        });
-    </script>
+   
 </body>
 </html>
