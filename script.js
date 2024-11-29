@@ -1,42 +1,5 @@
-// Đường dẫn API
-const API_URL = 'https://web-production-8e6a.up.railway.app';
 
-// Hàm đăng ký người dùng
-async function registerUser() {
-    const username = document.getElementById('username').value.trim(); // Loại bỏ khoảng trắng
-    const password = document.getElementById('password').value;
 
-    // Kiểm tra xem người dùng đã nhập đầy đủ thông tin chưa
-    if (!username || !password) {
-        alert('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!');
-        return;
-    }
-
-    try {
-        // Gửi yêu cầu đăng ký tới API
-        const response = await fetch(`${API_URL}/api/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }), // Gửi dữ liệu ở dạng JSON
-        });
-
-        // Xử lý phản hồi từ API
-        const result = await response.json();
-        if (response.ok) {
-            alert(result.message || 'Đăng ký thành công!');
-        } else {
-            alert(result.message || 'Đăng ký thất bại!'); // Hiển thị thông báo lỗi từ API
-        }
-    } catch (err) {
-        console.error('Lỗi kết nối hoặc xử lý:', err);
-        alert('Không thể kết nối tới server. Vui lòng thử lại sau.');
-    }
-}
-
-// Gắn sự kiện vào nút đăng ký
-document.getElementById('register-btn').addEventListener('click', registerUser);
 // Hàm lấy danh sách sản phẩm
 async function fetchProducts() {
     try {
