@@ -1,77 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Basic - Trang chủ</title>
-    <link rel="stylesheet" href="main.css">
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Math Webb</title>
+     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="style.css">
+     <link rel="stylesheet" href="./icon/all.css">
+     <link rel="icon" href="./images/favicon.png" />
+
 </head>
+
 <body>
-    <header class="header">
-        <div class="container">
-            <h1 class="logo">Shop Basic</h1>
-            <div class="auth-buttons">
-                <button id="login-btn" onclick="window.location.href='auth.html'">Login</button>
+     <div class="check">
+          <div id="sum"></div>
+          <div id="yes"></div>
+          <div id="no"></div>
+     </div>
+     <div class="container">
+          <h2 id="slogan">Web học Toán THCS</h2>
+          <i class="fas fa-bell"></i>
+          <div id="time"></div>
+          <div class="start">
+               <select name="" id="select">
+                    <option value="0">Hãy chọn lớp</option>
+                    <option value="1">Lớp 1</option>
+                    <option value="2">Lớp 2</option>
+                    <option value="3">Lớp 3</option>
+                    <option value="4">Lớp 4</option>
+                    <option value="5">Lớp 5</option>
+               </select>
+               <i id="seach_class" class="fas fa-search-plus"></i>
+          </div>
+          <button id="next">Bắt đầu học</button>
+          <p id="namebt"><i class="fas fa-comment"></i> Đề bài</p>
+          <div id="example"></div>
+          <input id="result" type="text" placeholder="Kết quả : ">
+          <button id="submit">Gửi kết quả</button>
+          <div>
+               <pre id="err"></pre>
+          </div>
+     </div>
 
-                <button id="logout-btn" style="display: none;">Logout</button>
-            </div>
-            <nav>
-                <ul class="menu">
-                    <li><a href="index.html" class="active">Trang chủ</a></li>
-                    <li><a href="products.html">Sản phẩm</a></li>
-                    <li><a href="#" id="cart-icon">Giỏ hàng (<span id="cart-count">0</span>)</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <main class="main-content">
-        <div class="hero">
-            <div class="container">
-                <h2>Welcome to Shop Basic</h2>
-                <p>Khám phá bộ sưu tập mới nhất của chúng tôi</p>
-            </div>
-        </div>
-        
-        <div class="container">
-            <section class="featured-products">
-                <h3>Sản phẩm nổi bật</h3>
-                <div id="featured-products" class="product-grid"></div>
-            </section>
-        </div>
-    </main>
-
-    <div id="cart-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Giỏ hàng</h2>
-            <div id="cart-list"></div>
-        </div>
-    </div>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Shop Basic</h4>
-                    <p>Địa chỉ: 123 Đường ABC, Quận XYZ</p>
-                    <p>Điện thoại: 0123-456-789</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Liên kết</h4>
-                    <ul>
-                        <li><a href="index.html">Trang chủ</a></li>
-                        <li><a href="products.html">Sản phẩm</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Shop Basic. All rights reserved.</p>
-            </div>
-        </div>
-        
-    </footer>
-
-    <script src="script.js"></script>
 </body>
+<script src="./js.js"></script>
 </html>
