@@ -295,4 +295,23 @@ div#sum {
          font-size: 20px;
          height:30px;
     }
+    /* Add this to your existing CSS file */
+.register-course {
+     position: fixed;
+     bottom: 20px;
+     right: 20px;
+     padding: 10px 20px;
+     background-color: #ff4500;
+     color: white;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+     font-size: 16px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+     transition: background-color 0.3s ease;
+ }
+ 
+ .register-course:hover {
+     background-color: #ff6633;
+ }
 }

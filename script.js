@@ -916,7 +916,15 @@ dea.src = "dea.mp3";
 next.style.display = 'none';
 
 document.getElementsByClassName('container')[0].style.marginTop = '-150px';
-
+document.addEventListener('DOMContentLoaded', () => {
+     // Existing code...
+ 
+     // Handle Register for Course button click
+     const registerButton = document.getElementById('register-course');
+     registerButton.addEventListener('click', () => {
+         window.location.href = 'https://www.facebook.com/profile.php?id=100087259971144';
+     });
+ });
 //START LEANING
 seach_class.addEventListener('click', () => {
     if (select.value == '0') {
