@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io("https://backend-chat-production-9f87.up.railway.app");
 
 // Send message on form submit
 const form = document.getElementById('form');
