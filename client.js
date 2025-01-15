@@ -18,6 +18,8 @@ form.addEventListener('submit', (e) => {
 usernameForm.addEventListener('submit', (e) => {
     e.preventDefault();
     socket.emit('setUsername', usernameInput.value);
+    localStorage.setItem('chatUsername', usernameInput.value);
+    document.getElementById('usernameForm').style.display = 'none';
     usernameInput.value = '';
 });
 

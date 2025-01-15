@@ -8,6 +8,10 @@
 </head>
 <body>
     <div id="chat-container">
+        <form id="usernameForm">
+            <input id="usernameInput" placeholder="Enter your name" />
+            <button type="submit">Save</button>
+        </form>
         <ul id="messages"></ul>
         <form id="form" action="">
             <input id="input" autocomplete="off" /><button>Send</button>
@@ -15,5 +19,11 @@
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="client.js"></script>
+    <script>
+    // Kiểm tra localStorage
+    if (localStorage.getItem('chatUsername')) {
+        document.getElementById('usernameForm').style.display = 'none';
+    }
+    </script>
 </body>
 </html>
