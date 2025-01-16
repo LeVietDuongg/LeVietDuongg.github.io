@@ -1,5 +1,10 @@
 const socket = io("https://backend-chat-production-9f87.up.railway.app");
 
+if (localStorage.getItem('chatUsername')) {
+    socket.emit('setUsername', localStorage.getItem('chatUsername'));
+    document.getElementById('usernameForm').style.display = 'none';
+}
+
 // Send message on form submit
 const form = document.getElementById('form');
 const input = document.getElementById('input');
