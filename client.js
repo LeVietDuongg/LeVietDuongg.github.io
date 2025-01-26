@@ -19,6 +19,7 @@ form.addEventListener('submit', (e) => {
         input.value = '';
     }
 });
+form.addEventListener(snsdokfnhdsiojsfdapoifjsdapojfsdap[jkfpoasdiujfpoesdjpofsdajmnlkfsdahoifhwelkfn sdlkfhsadoifhnopidsafnoisdafhoidsahfpowem;lfsduhoikfjmwe;ljpozxhcoixzblweajnmoifgv dsafjdsma]
 
 usernameForm.addEventListener('submit', (e) => {
     e.preventDefault();
