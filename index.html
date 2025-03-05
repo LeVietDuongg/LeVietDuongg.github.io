@@ -1,336 +1,207 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
- <HEAD>
-  <TITLE> Heart </TITLE>
-  <META NAME="Generator" CONTENT="EditPlus">
-  <META NAME="Author" CONTENT="">
-  <META NAME="Keywords" CONTENT="">
-  <META NAME="Description" CONTENT="">
- 
-   
-  <style>
-  html, body {
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  background: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
- 
-}
- 
-.box {
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-}
- 
-canvas {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-#pinkboard {
-  position: relative;
-  margin: auto;
-  height: 500px;
-  width: 500px;
-  animation: animate 1.3s infinite;
-}
- 
-#pinkboard:before, #pinkboard:after {
-  content: '';
-  position: absolute;
-  background: #FF5CA4;
-  width: 100px;
-  height: 160px;
-  border-top-left-radius: 50px;
-  border-top-right-radius: 50px;
-}
- 
-#pinkboard:before {
-  left: 100px;
-  transform: rotate(-45deg);
-  transform-origin: 0 100%;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25),
-              0 10px 10px rgba(0,0,0,0.22);
-}
- 
-#pinkboard:after {
-  left: 0;
-  transform: rotate(45deg);
-  transform-origin: 100% 100%;
-}
- 
-@keyframes animate {
-  0% {
-    transform: scale(1);
-  }
-  30% {
-    transform: scale(.8);
-  }
-  60% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-  </style>
- </HEAD>
- 
- <BODY>
-   <div class="box">
-      <canvas id="pinkboard"></canvas>
-   </div>
-  <script>
-  /*
- * Settings
- */
-var settings = {
-  particles: {
-    length:   2000, // maximum amount of particles
-    duration:   2, // particle duration in sec
-    velocity: 100, // particle velocity in pixels/sec
-    effect: -1.3, // play with this for a nice effect
-    size:      13, // particle size in pixels
-  },
-};
-/*
- * RequestAnimationFrame polyfill by Erik Möller
- */
-(function(){var b=0;var c=["ms","moz","webkit","o"];for(var a=0;a<c.length&&!window.requestAnimationFrame;++a){window.requestAnimationFrame=window[c[a]+"RequestAnimationFrame"];window.cancelAnimationFrame=window[c[a]+"CancelAnimationFrame"]||window[c[a]+"CancelRequestAnimationFrame"]}if(!window.requestAnimationFrame){window.requestAnimationFrame=function(h,e){var d=new Date().getTime();var f=Math.max(0,16-(d-b));var g=window.setTimeout(function(){h(d+f)},f);b=d+f;return g}}if(!window.cancelAnimationFrame){window.cancelAnimationFrame=function(d){clearTimeout(d)}}}());
-/*
- * Point class
- */
-var Point = (function() {
-  function Point(x, y) {
-    this.x = (typeof x !== 'undefined') ? x : 0;
-    this.y = (typeof y !== 'undefined') ? y : 0;
-  }
-  Point.prototype.clone = function() {
-    return new Point(this.x, this.y);
-  };
-  Point.prototype.length = function(length) {
-    if (typeof length == 'undefined')
-      return Math.sqrt(this.x * this.x + this.y * this.y);
-    this.normalize();
-    this.x *= length;
-    this.y *= length;
-    return this;
-  };
-  Point.prototype.normalize = function() {
-    var length = this.length();
-    this.x /= length;
-    this.y /= length;
-    return this;
-  };
-  return Point;
-})();
-/*
- * Particle class
- */
-var Particle = (function() {
-  function Particle() {
-    this.position = new Point();
-    this.velocity = new Point();
-    this.acceleration = new Point();
-    this.age = 0;
-  }
-  Particle.prototype.initialize = function(x, y, dx, dy) {
-    this.position.x = x;
-    this.position.y = y;
-    this.velocity.x = dx;
-    this.velocity.y = dy;
-    this.acceleration.x = dx * settings.particles.effect;
-    this.acceleration.y = dy * settings.particles.effect;
-    this.age = 0;
-  };
-  Particle.prototype.update = function(deltaTime) {
-    this.position.x += this.velocity.x * deltaTime;
-    this.position.y += this.velocity.y * deltaTime;
-    this.velocity.x += this.acceleration.x * deltaTime;
-    this.velocity.y += this.acceleration.y * deltaTime;
-    this.age += deltaTime;
-  };
-  Particle.prototype.draw = function(context, image) {
-    function ease(t) {
-      return (--t) * t * t + 1;
-    }
-    var size = image.width * ease(this.age / settings.particles.duration);
-    context.globalAlpha = 1 - this.age / settings.particles.duration;
-    context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
-  };
-  return Particle;
-})();
-/*
- * ParticlePool class
- */
-var ParticlePool = (function() {
-  var particles,
-      firstActive = 0,
-      firstFree   = 0,
-      duration    = settings.particles.duration;
- 
-  function ParticlePool(length) {
-    // create and populate particle pool
-    particles = new Array(length);
-    for (var i = 0; i < particles.length; i++)
-      particles[i] = new Particle();
-  }
-  ParticlePool.prototype.add = function(x, y, dx, dy) {
-    particles[firstFree].initialize(x, y, dx, dy);
-   
-    // handle circular queue
-    firstFree++;
-    if (firstFree   == particles.length) firstFree   = 0;
-    if (firstActive == firstFree       ) firstActive++;
-    if (firstActive == particles.length) firstActive = 0;
-  };
-  ParticlePool.prototype.update = function(deltaTime) {
-    var i;
-   
-    // update active particles
-    if (firstActive < firstFree) {
-      for (i = firstActive; i < firstFree; i++)
-        particles[i].update(deltaTime);
-    }
-    if (firstFree < firstActive) {
-      for (i = firstActive; i < particles.length; i++)
-        particles[i].update(deltaTime);
-      for (i = 0; i < firstFree; i++)
-        particles[i].update(deltaTime);
-    }
-   
-    // remove inactive particles
-    while (particles[firstActive].age >= duration && firstActive != firstFree) {
-      firstActive++;
-      if (firstActive == particles.length) firstActive = 0;
-    }
-   
-   
-  };
-  ParticlePool.prototype.draw = function(context, image) {
-    // draw active particles
-    if (firstActive < firstFree) {
-      for (i = firstActive; i < firstFree; i++)
-        particles[i].draw(context, image);
-    }
-    if (firstFree < firstActive) {
-      for (i = firstActive; i < particles.length; i++)
-        particles[i].draw(context, image);
-      for (i = 0; i < firstFree; i++)
-        particles[i].draw(context, image);
-    }
-  };
-  return ParticlePool;
-})();
-/*
- * Putting it all together
- */
-(function(canvas) {
-  var context = canvas.getContext('2d'),
-      particles = new ParticlePool(settings.particles.length),
-      particleRate = settings.particles.length / settings.particles.duration, // particles/sec
-      time;
- 
-  // get point on heart with -PI <= t <= PI
-  function pointOnHeart(t) {
-    return new Point(
-      160 * Math.pow(Math.sin(t), 3),
-      130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
-    );
-  }
- 
-  // creating the particle image using a dummy canvas
-  var image = (function() {
-    var canvas  = document.createElement('canvas'),
-        context = canvas.getContext('2d');
-    canvas.width  = settings.particles.size;
-    canvas.height = settings.particles.size;
-    // helper function to create the path
-    function to(t) {
-      var point = pointOnHeart(t);
-      point.x = settings.particles.size / 2 + point.x * settings.particles.size / 350;
-      point.y = settings.particles.size / 2 - point.y * settings.particles.size / 350;
-      return point;
-    }
-    // create the path
-    context.beginPath();
-    var t = -Math.PI;
-    var point = to(t);
-    context.moveTo(point.x, point.y);
-    while (t < Math.PI) {
-      t += 0.01; // baby steps!
-      point = to(t);
-      context.lineTo(point.x, point.y);
-    }
-    context.closePath();
-    // create the fill
-    context.fillStyle = '#FF5CA4';
-    context.fill();
-    // create the image
-    var image = new Image();
-    image.src = canvas.toDataURL();
-    return image;
-  })();
- 
-  // render that thing!
-  function render() {
-    // next animation frame
-    requestAnimationFrame(render);
-   
-    // update time
-    var newTime   = new Date().getTime() / 1000,
-        deltaTime = newTime - (time || newTime);
-    time = newTime;
-   
-    // clear canvas
-    context.clearRect(0, 0, canvas.width, canvas.height);
-   
-    // create new particles
-    var amount = particleRate * deltaTime;
-    for (var i = 0; i < amount; i++) {
-      var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
-      var dir = pos.clone().length(settings.particles.velocity);
-      particles.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
-    }
-   
-    // update and draw particles
-    particles.update(deltaTime);
-    particles.draw(context, image);
-  }
- 
-  // handle (re-)sizing of the canvas
-  function onResize() {
-    canvas.width  = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-  }
-  window.onresize = onResize;
- 
-  // delay rendering bootstrap
-  setTimeout(function() {
-    onResize();
-    render();
-  }, 10);
-})(document.getElementById('pinkboard'));
-  </script>
-  <div class="center-text",
-  style="background-color:rgb(0, 0, 0);
-        width: 100%;
-        color: rgb(225, 12, 168);
-        height:100%;
-        font-size: 31px;
-        font-style: italic;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 5px;
-        text-align: center;">Anh Yêu Em</div>
- </BODY>
-</HTML>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Lê Viết Dương</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Lê Viết Dương</h1>
+            </div>
+            <nav id="navbar">
+                <ul>
+                    <li><a href="#home">Trang chủ</a></li>
+                    <li><a href="#about">Giới thiệu</a></li>
+                    <li><a href="#experience">Kinh nghiệm</a></li>
+                    <li><a href="#projects">Dự án</a></li>
+                    <li><a href="#awards">Giải thưởng</a></li>
+                    <li><a href="#contact">Liên hệ</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Lê Viết Dương</h1>
+                    <h2>Front-end Developer | UI/UX Enthusiast</h2>
+                    <div class="social-links">
+                        <a href="mailto:le4465520@gmail.com"><i class="fas fa-envelope"></i></a>
+                        <a href="tel:+84385377030"><i class="fas fa-phone"></i></a>
+                        <a href="https://github.com/LeVietDuongg" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/d%C6%B0%C6%A1ng-l%C3%AA-vi%E1%BA%BFt-1a83192a5/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                    <a href="#contact" class="btn primary-btn">Liên hệ ngay</a>
+                </div>
+                <div class="hero-image">
+                    <img src="https://scontent-hkg1-2.xx.fbcdn.net/v/t39.30808-6/361573187_950889386026186_8756674317277680476_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeG3GfHPS0lOPcqW9rS8gENjY-6TZZGy7Xtj7pNlkbLtexPyXMbH5dbvX2jeB-FToDyWseYL8JphKJCe5eXARttl&_nc_ohc=AQMRJ_iANJAQ7kNvgGm4kYW&_nc_oc=AdgjV42QoSmJxjeZ83afRfea_jNRakdDWDPmv4wovGwdfugeR2BjdONQnX4Al9xZf2TLf2IHh7xzHGE2qFgBX2FV&_nc_zt=23&_nc_ht=scontent-hkg1-2.xx&_nc_gid=A-Emwr8VEMCFsjhsSGtM72z&oh=00_AYCkCQHonzD1fsZ8SIaUV62y8bcnYlgiT_hfg6JyvG5_0A&oe=67CDB350" alt="Lê Viết Dương">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">Giới thiệu</h2>
+            <div class="about-content">
+                <p>Tôi là một Front-end Developer với hơn 3 năm kinh nghiệm trong việc xây dựng và duy trì các website. Tôi có niềm đam mê với UI/UX và luôn tìm kiếm những giải pháp sáng tạo để giải quyết các vấn đề phức tạp. Mục tiêu của tôi là trở thành một Full-stack Developer và đóng góp vào các dự án có tác động tích cực.</p>
+                
+                <div class="education">
+                    <h3>Học vấn</h3>
+                    <ul>
+                        <li><strong>Trường:</strong> Đại học Công nghệ Thông Tin - Đại học Quốc gia Hồ Chí Minh</li>
+                        <li><strong>Chuyên ngành:</strong> Mạng Máy Tính</li>
+                        <li><strong>Tốt nghiệp:</strong> 2026</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">Dự án</h2>
+            <div class="project-grid">
+                <div class="project-card" data-aos="fade-up">
+                    <div class="project-image">
+                        <img src="pothele.png" alt="pothele detection">
+                    </div>
+                    <div class="project-info">
+                        <h3>pothole detection</h3>
+                        <p>Ứng dụng android phát hiện ổ gà cũng như cảnh báo ổ gà trên đường</p>
+                        <div class="project-tech">
+                            <span>Java</span>
+                            <span>SQL</span>
+                            <span>FireBase</span>
+                            
+                        </div>
+                        <a href="https://github.com/LeVietDuongg/potholes" target="_blank" class="btn">Xem trên GitHub</a>
+                    </div>
+                </div>
+
+                <div class="project-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="project-image">
+                        <img src="xidach.jpg" alt="Game Xì Dách">
+                    </div>
+                    <div class="project-info">
+                        <h3>Game Xì Dách</h3>
+                        <p>Ứng dụng game xì dách nhiều người chơi.</p>
+                        <div class="project-tech">
+                            <span>C# winform</span>
+                            <span>MongoDB</span>
+                        </div>
+                        <a href="https://github.com/BaCann/NT106.O22_Nhom21_GameXiDach" target="_blank" class="btn">Xem trên GitHub</a>
+                    </div>
+                </div>
+
+                <div class="project-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="project-image">
+                        <img src="cv.png" alt="portfolio website">
+                    </div>
+                    <div class="project-info">
+                        <h3>Portfolio Website</h3>
+                        <p>Website portfolio cá nhân với thiết kế responsive và hiệu ứng animation mượt mà.</p>
+                        <div class="project-tech">
+                            <span>HTML</span>
+                            <span>CSS</span>
+                            <span>JavaScript</span>
+                        </div>
+                        <a href="https://github.com/LeVietDuongg/LeVietDuongg.github.io" target="_blank" class="btn">Xem trên GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Awards Section -->
+    <section id="awards" class="awards">
+        <div class="container">
+            <h2 class="section-title">Giải thưởng & Hoạt động</h2>
+            
+                
+                <div class="award-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="award-year">2024</div>
+                    <div class="award-info">
+                        <h3>Chứng chỉ AWS Solutions Architect</h3>
+                        <p>Hoàn thành khóa đào tạo và lấy chứng chỉ về kiến trúc giải pháp trên AWS.</p>
+                    </div>
+                </div>
+                
+                <div class="award-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="award-year">2024</div>
+                    <div class="award-info">
+                        <h3>Top 10 cuộc thi 𝐍𝐄𝐓 𝐂𝐇𝐀𝐋𝐋𝐄𝐍𝐆𝐄 </h3>
+                        <p>Top 10 cuộc thi 𝐍𝐄𝐓 𝐂𝐇𝐀𝐋𝐋𝐄𝐍𝐆𝐄  tại trường UIT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Liên hệ</h2>
+            <div class="contact-content">
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Họ tên</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Nội dung</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn primary-btn">Gửi tin nhắn</button>
+                    </form>
+                </div>
+                <div class="contact-info">
+                    <h3>Thông tin liên hệ</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:le4465520@gmail.com">le4465520@gmail.com</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+84385377030">+84 385 377 030</a></li>
+                        <li><i class="fab fa-github"></i> <a href="https://github.com/LeVietDuongg" target="_blank">github.com/LeVietDuongg</a></li>
+                        <li><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/d%C6%B0%C6%A1ng-l%C3%AA-vi%E1%BA%BFt-1a83192a5/" target="_blank">linkedin.com/in/LeVietDuong</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Lê Viết Dương. All rights reserved.</p>
+            <p><a href="https://github.com/LeVietDuongg" target="_blank">LeVietDuong.github.io</a></p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="mainjs.js"></script>
+</body>
+</html>
